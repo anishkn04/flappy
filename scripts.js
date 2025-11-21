@@ -3,12 +3,20 @@ const CANVAS = document.getElementById("game")
 const CTX = CANVAS.getContext("2d");
 const CANVAS_WIDTH = 288;
 const CANVAS_HEIGHT = 512;
+const BIRD_SIZE = 50;
 
 // Initial state of the bird
 const GRAVITY = 0.1; // Might make it variable, maybe as difficulty?
 const BIRD_POS_X = CANVAS_WIDTH/2;
 const BIRD_POS_Y = CANVAS_HEIGHT/2;
 const FLAP_STRENGTH = -GRAVITY*35;
+const IMAGE_SROUCE = ["./images/dragon_up.webp", "./images/dragon_mid.webp", "./images/dragon_down.webp"];
+const SPRITE_FRAME_INTERVAL = 6;
+const BIRD_SPRITES = IMAGE_SROUCE.map((src) => {
+    const img = new Image(BIRD_SIZE, BIRD_SIZE);
+    img.src = src;
+    return img;
+});
 
 // Pipes constants
 const PIPE_WIDTH = 50;
@@ -22,6 +30,9 @@ let pipeTimer = PIPE_DISTANCE;
 // Bird class
 class Bird {
     constructor() {
+        this.img_ind = 0;
+        this.frameTimer = 0;
+        this.frameInterval = SPRITE_FRAME_INTERVAL;
         this.x = BIRD_POS_X;
         this.y = BIRD_POS_Y;
         this.vel_y = 0;
@@ -32,6 +43,11 @@ class Bird {
     update(){
         this.vel_y += this.gravity
         this.y += this.vel_y
+        this.frameTimer++;
+        if (this.frameTimer >= this.frameInterval) {
+            this.frameTimer = 0;
+            this.img_ind = (this.img_ind + 1) % BIRD_SPRITES.length
+        }
     }
     // Set the velocity to negative to make the bird go upward
     flap() {
@@ -40,7 +56,8 @@ class Bird {
     // Draw function for the bird into the canvas
     draw(){
         CTX.fillStyle = "#FFFFFF"
-        CTX.fillRect(this.x, this.y, 20, 20)
+        const frame = BIRD_SPRITES[this.img_ind]
+        CTX.drawImage(frame, this.x, this.y, BIRD_SIZE, BIRD_SIZE)
     }
 }
 
@@ -99,5 +116,9 @@ function draw(){
 draw();
 
 document.addEventListener("keypress", () => {
+    bird.flap()
+})
+
+CANVAS.addEventListener("pointerdown", () => {
     bird.flap()
 })
