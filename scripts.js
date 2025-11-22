@@ -1,3 +1,7 @@
+// HTML elements
+const START_BUTTON = document.getElementById("start-button")
+const SCORE_CARD = document.getElementById("score-card")
+
 // Canvas details
 const CANVAS = document.getElementById("game")
 const CTX = CANVAS.getContext("2d");
@@ -11,7 +15,7 @@ const BIRD_POS_X = CANVAS_WIDTH/2;
 const BIRD_POS_Y = CANVAS_HEIGHT/2;
 const FLAP_STRENGTH = -GRAVITY*35;
 const IMAGE_SROUCE = ["./images/dragon_up.webp", "./images/dragon_mid.webp", "./images/dragon_down.webp"];
-const SPRITE_FRAME_INTERVAL = 6;
+const SPRITE_FRAME_INTERVAL = 15;
 const BIRD_SPRITES = IMAGE_SROUCE.map((src) => {
     const img = new Image(BIRD_SIZE, BIRD_SIZE);
     img.src = src;
@@ -58,6 +62,10 @@ class Bird {
         CTX.fillStyle = "#FFFFFF"
         const frame = BIRD_SPRITES[this.img_ind]
         CTX.drawImage(frame, this.x, this.y, BIRD_SIZE, BIRD_SIZE)
+        // A circle around the bird, so that the user knows which part of the bird makes them out
+        CTX.beginPath()
+        CTX.arc(this.x + BIRD_SIZE / 2, this.y + BIRD_SIZE / 2, BIRD_SIZE/2, 2 * Math.PI, 0)
+        CTX.stroke()
     }
 }
 
@@ -110,10 +118,34 @@ function draw(){
 
     pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
 
+    if (bird.y + BIRD_SIZE >= CANVAS_HEIGHT || bird.y <= 0){
+        endGame()
+        return
+    }
+
     requestAnimationFrame(draw)
 }
 
-draw();
+function startGame(){
+    bird = new Bird();
+    pipes = []
+    START_BUTTON.style.visibility = "hidden"
+    draw();
+}
+
+function endGame() {
+    START_BUTTON.style.visibility = "visible"
+}
+
+START_BUTTON.addEventListener("click", () => {
+    startGame()
+})
+
+document.addEventListener("keypress", (e) => {
+    if(e.key == "Enter") {
+        startGame()
+    }
+})
 
 document.addEventListener("keypress", () => {
     bird.flap()
