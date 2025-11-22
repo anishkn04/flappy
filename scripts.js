@@ -1,3 +1,7 @@
+// HTML elements
+const START_BUTTON = document.getElementById("start-button")
+const SCORE_CARD = document.getElementById("score-card")
+
 // Canvas details
 const CANVAS = document.getElementById("game")
 const CTX = CANVAS.getContext("2d");
@@ -11,7 +15,7 @@ const BIRD_POS_X = CANVAS_WIDTH/2;
 const BIRD_POS_Y = CANVAS_HEIGHT/2;
 const FLAP_STRENGTH = -GRAVITY*35;
 const IMAGE_SROUCE = ["./images/dragon_up.webp", "./images/dragon_mid.webp", "./images/dragon_down.webp"];
-const SPRITE_FRAME_INTERVAL = 6;
+const SPRITE_FRAME_INTERVAL = 15;
 const BIRD_SPRITES = IMAGE_SROUCE.map((src) => {
     const img = new Image(BIRD_SIZE, BIRD_SIZE);
     img.src = src;
@@ -58,6 +62,9 @@ class Bird {
         CTX.fillStyle = "#FFFFFF"
         const frame = BIRD_SPRITES[this.img_ind]
         CTX.drawImage(frame, this.x, this.y, BIRD_SIZE, BIRD_SIZE)
+        // A circle around the bird, so that the user knows which part of the bird makes them out
+        CTX.strokeStyle = "red"
+        CTX.strokeRect(this.x, this.y, BIRD_SIZE, BIRD_SIZE)
     }
 }
 
@@ -74,11 +81,34 @@ class Pipe {
     }
     draw(){
         CTX.fillStyle = "#00FF00"
-        // Lower pipe, starts at the random gap
+        // Upper pipe, starts at 0 and upto the random gap
         CTX.fillRect(this.x, 0, this.width, this.gap_y)
-        //Upper pipe, starts at random gap + the gap height
+        //Lower pipe, starts at random gap + the gap height
         let lowerPipeY = this.gap_height + this.gap_y;
         CTX.fillRect(this.x, lowerPipeY, this.width, CANVAS_HEIGHT - lowerPipeY)
+    }
+    did_it_touch(flyingObj) {
+        let pipeLeft = this.x;
+        let pipeRight = this.x + this.width;
+        let lowerPipeTop = this.gap_height + this.gap_y
+        let upperPipeBottom = this.gap_y
+        let flyingRight = flyingObj.x + BIRD_SIZE;
+        let flyingLeft = flyingObj.x;
+        let flyingTop = flyingObj.y;
+        let flyingBottom = flyingObj.y + BIRD_SIZE;
+        let crash = false;
+        if (pipeLeft <= flyingRight && pipeRight >= flyingLeft) {
+            // Check overlap with upper pipe
+            if (flyingTop < upperPipeBottom && flyingBottom > 0) {
+            crash = true;
+            }
+            // Check overlap with lower pipe
+            if (flyingTop < CANVAS_HEIGHT && flyingBottom > lowerPipeTop) {
+            crash = true;
+            }
+        }
+        console.log(crash)
+        return crash
     }
 }
 
@@ -87,6 +117,7 @@ let bird = new Bird()
 let pipes = []
 
 function draw(){
+    let shouldEndGame = false;
     CTX.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 
     // Update the bird state
@@ -106,14 +137,47 @@ function draw(){
         pipe.update()
         // Draw the pipe to canvas
         pipe.draw()
+        // If bird touches the pipes end the game
+        if(pipe.did_it_touch(bird)) {
+            shouldEndGame = endGame()
+        }
     })
 
     pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
 
+    // If bird touches the surface or the ceiling
+    if (bird.y + BIRD_SIZE >= CANVAS_HEIGHT || bird.y <= 0){
+        shouldEndGame = endGame()
+    }
+
+    if(shouldEndGame) {
+        return
+    }
+
     requestAnimationFrame(draw)
 }
 
-draw();
+function startGame(){
+    bird = new Bird();
+    pipes = []
+    START_BUTTON.style.visibility = "hidden"
+    draw();
+}
+
+function endGame() {
+    START_BUTTON.style.visibility = "visible"
+    return true
+}
+
+START_BUTTON.addEventListener("click", () => {
+    startGame()
+})
+
+document.addEventListener("keypress", (e) => {
+    if(e.key == "Enter") {
+        startGame()
+    }
+})
 
 document.addEventListener("keypress", () => {
     bird.flap()
