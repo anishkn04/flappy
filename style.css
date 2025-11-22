@@ -15,4 +15,12 @@ body {
 
 #game {
     background-color: skyblue;
+    height: 100svh;
+}
+
+@media screen and (max-width: 480px) {
+    body {
+        flex-direction: column-reverse;
+    }
+    
 }
