@@ -5,15 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Flappy Bird</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas id="game" width="288" height="512""></canvas>
-    <div">
-        <p>
-            Tap or hit Space bar to flap!
-        </p>
-        <button id="start-button">Start Game</button>
-    </div>
+    <section id="game-container">
+        <canvas id="game" width="252" height="448"></canvas>
+    </section>
+    <section id="score-card">
+        <div id="game-info">
+            <p>
+                Hit "Enter" to start the game.
+            </p>
+            <p>Press "Space" or Tap on the screen to jump.</p>
+            <p id="high-score">High Score: <span id="score-span"></span></p>
+            <button id="start-button">Start Game</button>
+        </div>
+    </section>
     <script src="scripts.js"></script>
 </body>
 </html>
