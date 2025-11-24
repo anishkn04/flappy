@@ -19,6 +19,11 @@
                 Hit "Enter" to start the game.
             </p>
             <p>Press "Space" or Tap on the screen to jump.</p>
+            <select name="level" id="level" oninput="loadScore()">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
             <p id="high-score">High Score: <span id="score-span"></span></p>
             <button id="start-button">Start Game</button>
         </div>
