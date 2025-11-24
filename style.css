@@ -7,15 +7,25 @@
 body {
     height: 100vh;
     width: 100vw;
+}
+
+#game-container {
     display: flex;
     /* flex-direction: column; */
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
+    height: 100%;
+    background-color: lightgrey;
 }
 
 #game {
     background-color: skyblue;
-    height: 100svh;
+    height: 100%;
+}
+
+#game-info {
+    position: absolute;
+    top: 0
 }
 
 @media screen and (max-width: 480px) {
