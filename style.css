@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Press Start 2P';
 }
 
 body {
@@ -23,14 +24,43 @@ body {
     height: 100%;
 }
 
-#game-info {
+#score-card {
     position: absolute;
-    top: 0
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
 }
 
-@media screen and (max-width: 480px) {
+#game-info {
+    height: 100%;
+    aspect-ratio: auto 288 / 512;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+    gap: 50px;
+}
+
+#high-score {
+    color: red;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: green;
+    color: white;
+}
+
+/* @media screen and (max-width: 480px) {
     body {
         flex-direction: column-reverse;
     }
-    
-}
+
+} */

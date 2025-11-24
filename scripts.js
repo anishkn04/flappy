@@ -1,6 +1,12 @@
 // HTML elements
 const START_BUTTON = document.getElementById("start-button")
 const SCORE_CARD = document.getElementById("score-card")
+const SCORE_SPAN = document.getElementById("score-span")
+
+const loadScore = () => {
+    SCORE_SPAN.innerText = localStorage.getItem("high_score") || 0
+}
+loadScore()
 
 // Canvas details
 const CANVAS = document.getElementById("game")
@@ -212,6 +218,7 @@ function draw(){
 }
 
 function startGame(){
+    SCORE_CARD.style.display = "none";
     bird = new Bird();
     pipes = []
     score = new Score()
@@ -224,6 +231,11 @@ function endGame() {
     is_running = false
     localStorage.setItem("high_score", score.highScore)
     START_BUTTON.style.visibility = "visible"
+    setTimeout(()=> {
+        if(is_running == false){
+            SCORE_CARD.style.display = "flex"
+        }
+    }, 1000)
     return true
 }
 
