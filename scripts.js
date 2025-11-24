@@ -42,6 +42,8 @@ const PIPE_GAP = 200;
 const MIN_GAP_Y = 100;
 const MAX_GAP_Y = CANVAS_HEIGHT - 100;
 const PIPE_DISTANCE = 300;
+const PIPE_IMAGE = new Image(PIPE_WIDTH, CANVAS_HEIGHT);
+PIPE_IMAGE.src = "./images/water.webp"
 let pipeTimer = PIPE_DISTANCE;
 
 // Game status
@@ -104,17 +106,25 @@ class Pipe {
         this.width = PIPE_WIDTH;
         this.gap_y = Math.random() * (MAX_GAP_Y - MIN_GAP_Y);
         this.crossStatus = false
+        this.upperPipe = PIPE_IMAGE
+        this.lowerPipe = PIPE_IMAGE
     }
     update(){
         this.x += this.vel_x
     }
     draw(){
-        CTX.fillStyle = "#00FF00"
+        // CTX.fillStyle = "#00FF00"
         // Upper pipe, starts at 0 and upto the random gap
-        CTX.fillRect(this.x, 0, this.width, this.gap_y)
+        // CTX.fillRect(this.x, 0, this.width, this.gap_y)
+        this.upperPipe.height = this.gap_y
+        this.upperPipe.width = this.width
+        CTX.drawImage(this.upperPipe, this.x, 0, this.width, this.gap_y)
         //Lower pipe, starts at random gap + the gap height
         let lowerPipeY = this.gap_height + this.gap_y;
-        CTX.fillRect(this.x, lowerPipeY, this.width, CANVAS_HEIGHT - lowerPipeY)
+        this.lowerPipe.width = this.width
+        this.lowerPipe.height = CANVAS_HEIGHT - lowerPipeY
+        CTX.drawImage(this.lowerPipe, this.x, lowerPipeY, this.width, CANVAS_HEIGHT - lowerPipeY)
+        // CTX.fillRect(this.x, lowerPipeY, this.width, CANVAS_HEIGHT - lowerPipeY)
     }
     did_it_touch(flyingObj) {
         let pipeLeft = this.x;
