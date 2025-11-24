@@ -163,9 +163,34 @@ class Score {
     }
 }
 
-let bird = new Bird()
-let pipes = []
-let score = new Score()
+class Sound {
+    constructor(src){
+        this.soundElem = document.getElementById("audio")
+        if(src){
+            this.soundElem.src = src
+        }
+    }
+    play(repeat=true){
+        if(repeat){
+            this.soundElem.loop = true
+        } else {
+            this.soundElem.loop = false
+        }
+        this.soundElem.play()
+    }
+    stop(){
+        this.soundElem.pause()
+    }
+}
+
+let bird;
+let pipes;
+let score;
+let sound;
+// let bird = new Bird()
+// let pipes = []
+// let score = new Score()
+// let sound = new Sound("./sounds/panchhi_banu.webm")
 
 function draw(){
     let shouldEndGame = false;
@@ -222,6 +247,8 @@ function startGame(){
     bird = new Bird();
     pipes = []
     score = new Score()
+    sound = new Sound("./sounds/panchhi_banu.webm")
+    sound.play()
     START_BUTTON.style.visibility = "hidden"
     is_running = true
     draw();
@@ -231,6 +258,9 @@ function endGame() {
     is_running = false
     localStorage.setItem("high_score", score.highScore)
     START_BUTTON.style.visibility = "visible"
+    sound.stop()
+    sound = new Sound("./sounds/quack.mp3")
+    sound.play(false)
     setTimeout(()=> {
         if(is_running == false){
             SCORE_CARD.style.display = "flex"
@@ -249,8 +279,10 @@ document.addEventListener("keypress", (e) => {
     }
 })
 
-document.addEventListener("keypress", () => {
-    bird.flap()
+document.addEventListener("keypress", (e) => {
+    if(e.key == " " || e.key == "Spacebar") {
+        bird.flap()
+    }
 })
 
 CANVAS.addEventListener("pointerdown", () => {
