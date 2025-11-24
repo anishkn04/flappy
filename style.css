@@ -2,25 +2,68 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Press Start 2P';
 }
 
 body {
     height: 100vh;
     width: 100vw;
+}
+
+#game-container {
     display: flex;
     /* flex-direction: column; */
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
+    height: 100%;
+    background-color: lightgrey;
 }
 
 #game {
     background-color: skyblue;
-    height: 100svh;
+    overflow: hidden;
 }
 
-@media screen and (max-width: 480px) {
+#score-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+#game-info {
+    height: 100%;
+    max-width: 100vw;
+    aspect-ratio: auto 288 / 512;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+    gap: 50px;
+    background-color: #FFFFFFaa;
+}
+
+#high-score {
+    color: red;
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: green;
+    color: white;
+}
+
+/* @media screen and (max-width: 480px) {
     body {
         flex-direction: column-reverse;
     }
-    
-}
+
+} */
