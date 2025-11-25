@@ -172,7 +172,7 @@ class Score {
         this.highScore = localStorage.getItem(`high_score_${SELECTED_LEVEL.value}`) || 0
     }
     draw(){
-        CTX.font = "15px 'Press Start 2P'"
+        CTX.font = "bold 15px 'Doto'"
         CTX.fillText("SCORE: " + this.currentScore, 10, 30)
         CTX.fillText("HIGH: " + this.highScore, 10, 50)
     }
